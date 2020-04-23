@@ -55,7 +55,7 @@ namespace DreamsickLauncher
 
         private void label1_Click(object sender, EventArgs e)
         {
-            s.Show();
+            
         }
 
         private void Label_MouseLeave(object sender, EventArgs e)
@@ -79,5 +79,9 @@ namespace DreamsickLauncher
             Application.Exit();
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
+            s.Show();
+        }
     }
 }
