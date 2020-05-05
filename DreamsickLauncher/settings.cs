@@ -14,7 +14,7 @@ namespace DreamsickLauncher
 {
     public partial class settings : Form
     {
-        public static Size resolution = new Size();
+        public static Size resolution = new Size(800,600);
         public static bool fullscreen = true;
         public static bool ambientSound = true;
         public static bool playerSound = true;

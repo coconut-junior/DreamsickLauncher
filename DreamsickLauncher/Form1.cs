@@ -53,7 +53,7 @@ namespace DreamsickLauncher
 
             foreach (Control c in this.Controls)
             {
-                if (c is Label l && c != label5)
+                if (c is Label l)
                 {
                     l.Font = new Font(pfc.Families[0], 30, FontStyle.Regular);
                 }
@@ -90,15 +90,14 @@ namespace DreamsickLauncher
         private void label1_Click(object sender, EventArgs e)
         {
             label1.Enabled = false;
+            Process p = new Process();
+            p.StartInfo.FileName = "python.exe";
+            List<string> args = new List<string>();
+
             if (File.Exists("dreamsick.exe"))
             {
-                Process.Start("dreamsick.exe");
-            }
-            else if (File.Exists("dreamsick.py"))
-            {
-                Process p = new Process();
-                p.StartInfo.FileName = "python.exe";
-                List<string> args = new List<string>{ "dreamsick.py"};
+                args = new List<string> { @"dreamsick.exe" };
+                
                 if (settings.fullscreen)
                 {
                     args.Add("-fullscreen ");
@@ -117,9 +116,53 @@ namespace DreamsickLauncher
 
                 p.Start();
             }
+            else if (File.Exists(@"C:\MEGA\GitHub\dreamsick\src\main.py"))
+            {
+                args = new List<string> { @"C:\MEGA\GitHub\dreamsick\src\main.py" };
+                p.StartInfo.WorkingDirectory = @"C:\MEGA\GitHub\dreamsick\src\";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+
+                if (settings.fullscreen)
+                {
+                    args.Add("-fullscreen ");
+                }
+                if (settings.showDebug)
+                {
+                    args.Add("-debug ");
+                }
+                args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
+                args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
+
+                foreach (string a in args)
+                {
+                    p.StartInfo.Arguments += a + " ";
+                }
+                p.Start();
+            }
+            else if (File.Exists("main.py"))
+            {
+                args = new List<string> { "main.py" };
+                if (settings.fullscreen)
+                {
+                    args.Add("-fullscreen ");
+                }
+                if (settings.showDebug)
+                {
+                    args.Add("-debug ");
+                }
+                args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
+                args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
+
+                foreach (string a in args)
+                {
+                    p.StartInfo.Arguments += a + " ";
+                }
+                p.Start();
+            }
             else
             {
-                MessageBox.Show("Could not locate dreamsick.exe", "Launch Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Could not locate dreamsick executable.", "Launch Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             Application.Exit();
