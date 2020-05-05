@@ -90,7 +90,7 @@ namespace DreamsickLauncher
 
             try
             {
-                if (comboBox1.Text == "Fullscreen")
+                if (comboBox2.Text == "Fullscreen")
                 {
                     fullscreen = true;
                 }

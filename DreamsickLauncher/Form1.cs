@@ -51,11 +51,11 @@ namespace DreamsickLauncher
                 }
             }
 
-            foreach (Control c in this.Controls)
+            foreach (Control c in panel1.Controls)
             {
                 if (c is Label l)
                 {
-                    l.Font = new Font(pfc.Families[0], 30, FontStyle.Regular);
+                    l.Font = new Font(pfc.Families[0], 18, FontStyle.Regular);
                 }
             }
         }
