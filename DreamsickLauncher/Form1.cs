@@ -10,6 +10,7 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 
 namespace DreamsickLauncher
 {
@@ -56,6 +57,11 @@ namespace DreamsickLauncher
                 if (c is Label l)
                 {
                     l.Font = new Font(pfc.Families[0], 18, FontStyle.Regular);
+                    if (settings.language == "jp")
+                    {
+                        l.Text = settings.japanese[l.Text];
+                        l.Dock = DockStyle.Right;
+                    }
                 }
             }
         }
@@ -87,77 +93,72 @@ namespace DreamsickLauncher
             lastLocation = e.Location;
         }
 
+        private string getArgs(string processName)
+        {
+            List<string> args = new List<string>();
+            args.Add(processName);
+
+            if (settings.fullscreen)
+            {
+                args.Add("-fullscreen");
+            }
+            if (settings.showDebug)
+            {
+                args.Add("-debug");
+            }
+            if (settings.skipIntro)
+            {
+                args.Add("-skipintro");
+            }
+            if (settings.removeFramecap)
+            {
+                args.Add("-framecap:60");
+            }
+            if (settings.disableZoom)
+            {
+                args.Add("-disablezoom");
+            }
+            if (settings.disableLighting)
+            {
+                args.Add("-disablelighting");
+            }
+
+            args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
+            args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
+
+            string formattedArgs = "";
+
+            foreach (string a in args)
+            {
+                formattedArgs += a + " ";
+            }
+
+            return formattedArgs;
+        }
+
         private void label1_Click(object sender, EventArgs e)
         {
             label1.Enabled = false;
             Process p = new Process();
-            p.StartInfo.FileName = "python.exe";
+            p.StartInfo.FileName = "pythonw.exe";
             List<string> args = new List<string>();
 
             if (File.Exists("dreamsick.exe"))
             {
-                args = new List<string> { @"dreamsick.exe" };
-                
-                if (settings.fullscreen)
-                {
-                    args.Add("-fullscreen ");
-                }
-                if (settings.showDebug)
-                {
-                    args.Add("-debug ");
-                }
-                args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
-                args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
-
-                foreach (string a in args)
-                {
-                    p.StartInfo.Arguments += a + " ";
-                }
-
+                p.StartInfo.Arguments = getArgs("dreamsick.exe");
                 p.Start();
             }
-            else if (File.Exists(@"C:\MEGA\GitHub\dreamsick\src\main.py"))
+            else if (File.Exists(@"C:\GitHub\dreamsick\src\dreamsick.py"))
             {
-                args = new List<string> { @"C:\MEGA\GitHub\dreamsick\src\main.py" };
-                p.StartInfo.WorkingDirectory = @"C:\MEGA\GitHub\dreamsick\src\";
+                p.StartInfo.WorkingDirectory = @"C:\GitHub\dreamsick\src\";
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
-
-                if (settings.fullscreen)
-                {
-                    args.Add("-fullscreen ");
-                }
-                if (settings.showDebug)
-                {
-                    args.Add("-debug ");
-                }
-                args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
-                args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
-
-                foreach (string a in args)
-                {
-                    p.StartInfo.Arguments += a + " ";
-                }
+                p.StartInfo.Arguments = getArgs(@"C:\GitHub\dreamsick\src\dreamsick.py");
                 p.Start();
             }
-            else if (File.Exists("main.py"))
+            else if (File.Exists("dreamsick.py"))
             {
-                args = new List<string> { "main.py" };
-                if (settings.fullscreen)
-                {
-                    args.Add("-fullscreen ");
-                }
-                if (settings.showDebug)
-                {
-                    args.Add("-debug ");
-                }
-                args.Add("-resx:" + settings.resolution.Width.ToString() + " ");
-                args.Add("-resy:" + settings.resolution.Height.ToString() + " ");
-
-                foreach (string a in args)
-                {
-                    p.StartInfo.Arguments += a + " ";
-                }
+                p.StartInfo.Arguments = "dreamsick.py";
                 p.Start();
             }
             else
